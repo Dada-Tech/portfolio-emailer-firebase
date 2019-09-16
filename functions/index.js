@@ -27,8 +27,27 @@ const corsOptions = {
 }
 app.use(cors(corsOptions));
 
-// captcha
-app.post('/recaptcha',function (request, response) {
+//Joi input validation middleware
+inputValidation = function(request, response, next) {
+    // input validation
+    const schema = Joi.object().keys({
+        name: Joi.string().min(3).required(),
+        email: Joi.string().min(3).required(),
+        subject: Joi.string().min(3).required(),
+        message: Joi.string().min(3).required(),
+        recaptcha: Joi.string()
+    });
+
+    const result = Joi.validate(request.body,schema);
+    if(result.error) {
+        return response.status(400).send({"responseMsg": result.error.message});
+    } else {
+        return next();
+    }
+}
+
+//captcha middleware
+captchaVerify = function(request, response, next) {
     // verify recaptcha
     if (request.body.recaptcha === undefined || request.body.recaptcha === '' || request.body.recaptcha === null) {
         return response.status(400).send({"responseMsg": "Captcha undefined"});
@@ -40,11 +59,12 @@ app.post('/recaptcha',function (request, response) {
     https.get(verificationURL, (resG) => {
         let rawData = '';
         resG.on('data', (chunk) => { rawData += chunk })
-        resG.on('end', function() {
+        resG.on('end', () => {
             try {
                 var parsedData = JSON.parse(rawData);
                 if (parsedData.success === true) {
-                    return response.status(200).send({"responseMsg": "Captcha success"});
+                    // return response.status(200).send({"responseMsg": "Captcha success"});
+                    return next();
                 } else {
                     return response.status(400).send({"responseMsg": "Captcha verification Failure"});
                 }
@@ -53,39 +73,26 @@ app.post('/recaptcha',function (request, response) {
             }
         });
     });
-});
+}
 
 //mail POST
-app.post('/mail', (request,response) => {
-  // input validation
-  const schema = Joi.object().keys({
-      name: Joi.string().min(3).required(),
-      email: Joi.string().min(3).required(),
-      subject: Joi.string().min(3).required(),
-      message: Joi.string().min(3).required(),
-      recaptcha: Joi.string()
-  });
+app.post('/mail', inputValidation, captchaVerify, (request,response) => {
 
-  const result = Joi.validate(request.body,schema);
-  if(result.error) {
-      return response.status(400).send({"responseMsg": result.error.message});
-  }
-  
-  //db upload
-  db.collection("mail").add({
-      created: admin.firestore.FieldValue.serverTimestamp(),
-      name: request.body.name,
-      email: request.body.email,
-      subject: request.body.subject,
-      message: request.body.message
-  })
-      .then(() => {
-          return response.status(200).send({"responseMsg": "successfully added to database"});
-      })
-      .catch((error) => {
-          console.error(error.toString());
-          return response.status(501).send({"responseMsg": "database error"});
-      });
+    //db upload
+    db.collection("mail").add({
+        created: admin.firestore.FieldValue.serverTimestamp(),
+        name: request.body.name,
+        email: request.body.email,
+        subject: request.body.subject,
+        message: request.body.message
+    })
+        .then(() => {
+            return response.status(200).send({"responseMsg": "successfully added to database"});
+        })
+        .catch((error) => {
+            console.error(error.toString());
+            return response.status(501).send({"responseMsg": "database error"});
+        });
 });
 
 exports.app = functions.https.onRequest(app);
