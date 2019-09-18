@@ -27,7 +27,7 @@ const corsOptions = {
 }
 app.use(cors(corsOptions));
 
-//Joi input validation middleware
+// Joi input validation middleware
 inputValidation = function(request, response, next) {
     // input validation
     const schema = Joi.object().keys({
@@ -46,7 +46,7 @@ inputValidation = function(request, response, next) {
     }
 }
 
-//captcha middleware
+// captcha middleware
 captchaVerify = function(request, response, next) {
     // verify recaptcha
     if (request.body.recaptcha === undefined || request.body.recaptcha === '' || request.body.recaptcha === null) {
@@ -63,7 +63,6 @@ captchaVerify = function(request, response, next) {
             try {
                 var parsedData = JSON.parse(rawData);
                 if (parsedData.success === true) {
-                    // return response.status(200).send({"responseMsg": "Captcha success"});
                     return next();
                 } else {
                     return response.status(400).send({"responseMsg": "Captcha verification Failure"});
@@ -75,10 +74,10 @@ captchaVerify = function(request, response, next) {
     });
 }
 
-//mail POST
+// mail POST
 app.post('/mail', inputValidation, captchaVerify, (request,response) => {
 
-    //db upload
+    // db upload
     db.collection("mail").add({
         created: admin.firestore.FieldValue.serverTimestamp(),
         name: request.body.name,
