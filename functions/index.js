@@ -14,7 +14,7 @@ let db = admin.firestore();
 app.use(express.json());
 
 // cors middleware
-const originsWhitelist = ['https://dadadavid.com','http://localhost:4200','http://127.0.0.1:4200'];
+const originsWhitelist = ['https://dadadavid.com','https://dadadavid.com','http://localhost:4200','http://127.0.0.1:4200'];
 const corsOptions = {
     origin: function(origin, callback) {
         var isWhitelisted = originsWhitelist.indexOf(origin) !== -1;
