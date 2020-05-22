@@ -18,7 +18,7 @@ const originsWhitelist = ['https://daviddada.com','https://dadadavid.com','http:
 const corsOptions = {
     origin: function(origin, callback) {
         const isWhitelisted = originsWhitelist.includes(origin);
-        callback(null, true);
+        callback(null, isWhitelisted);
     },
     "optionsSuccessStatus": 200,
     "Access-Control-Allow-Methods":"GET, PUT, POST, DELETE, HEAD, OPTIONS",
