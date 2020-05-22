@@ -14,7 +14,7 @@ let db = admin.firestore();
 app.use(express.json());
 
 // cors middleware
-const originsWhitelist = ['https://dadadavid.com','https://dadadavid.com','http://localhost:4200','http://127.0.0.1:4200'];
+const originsWhitelist = ['https://daviddada.com','https://dadadavid.com','http://localhost:4200','http://127.0.0.1:4200'];
 const corsOptions = {
     origin: function(origin, callback) {
         var isWhitelisted = originsWhitelist.indexOf(origin) !== -1;
@@ -24,7 +24,7 @@ const corsOptions = {
     "Access-Control-Allow-Methods":"GET, PUT, POST, DELETE, HEAD, OPTIONS",
     "Access-Control-Allow-Headers":"Origin, X-Requested-With, Content-Type, Accept",
     "Access-Control-Allow-Origin":"*"
-}
+};
 app.use(cors(corsOptions));
 
 // Joi input validation middleware
@@ -44,7 +44,7 @@ inputValidation = function(request, response, next) {
     } else {
         return next();
     }
-}
+};
 
 // captcha middleware
 captchaVerify = function(request, response, next) {
@@ -58,7 +58,7 @@ captchaVerify = function(request, response, next) {
 
     https.get(verificationURL, (resG) => {
         let rawData = '';
-        resG.on('data', (chunk) => { rawData += chunk })
+        resG.on('data', (chunk) => { rawData += chunk });
         resG.on('end', () => {
             try {
                 var parsedData = JSON.parse(rawData);
@@ -72,7 +72,7 @@ captchaVerify = function(request, response, next) {
             }
         });
     });
-}
+};
 
 // mail POST
 app.post('/mail', inputValidation, captchaVerify, (request,response) => {
