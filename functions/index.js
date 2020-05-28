@@ -31,7 +31,7 @@ const corsOptions = {
     "Access-Control-Allow-Credentials": true,
     "preflightContinue": true,
 };
-app.options('*', cors(corsOptions));
+app.options('*', cors());
 app.use(cors(corsOptions));
 
 // Joi input validation middleware
