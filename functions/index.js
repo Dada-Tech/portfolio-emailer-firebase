@@ -17,7 +17,7 @@ app.use(express.json());
 const originsWhitelist = ['https://daviddada.com','https://dadadavid.com','http://localhost:4200','http://127.0.0.1:4200'];
 const corsOptions = {
     origin: function(origin, callback) {
-        const isWhitelisted = originsWhitelist.includes(origin);
+        const isWhitelisted = true; //originsWhitelist.includes(origin);
         callback(null, isWhitelisted);
     },
     "optionsSuccessStatus": 200,
