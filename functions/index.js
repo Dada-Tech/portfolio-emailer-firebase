@@ -17,7 +17,7 @@ app.use(express.json());
 const originsWhitelist = ['https://daviddada.com','https://dadadavid.com','http://localhost:4200','http://127.0.0.1:4200'];
 const corsOptions = {
     origin: function(origin, callback) {
-        const isWhitelisted = true; //originsWhitelist.includes(origin);
+        const isWhitelisted = originsWhitelist.includes(origin);
         callback(null, isWhitelisted);
     },
     "optionsSuccessStatus": 200,
@@ -30,11 +30,6 @@ app.use(cors(corsOptions));
 
 // Joi input validation middleware
 inputValidation = function(request, response, next) {
-    response.header("Access-Control-Allow-Origin", "*");
-    response.header("Access-Control-Allow-Methods", "DELETE, GET, POST, PUT, OPTIONS");
-    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    response.header("Access-Control-Allow-Credentials", true);
-
     // input validation
     const schema = Joi.object().keys({
         name: Joi.string().min(3).required(),
@@ -54,11 +49,6 @@ inputValidation = function(request, response, next) {
 
 // captcha middleware
 captchaVerify = function(request, response, next) {
-    response.header("Access-Control-Allow-Origin", "*");
-    response.header("Access-Control-Allow-Methods", "DELETE, GET, POST, PUT, OPTIONS");
-    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    response.header("Access-Control-Allow-Credentials", true);
-
     // verify recaptcha
     if (request.body.recaptcha === undefined || request.body.recaptcha === '' || request.body.recaptcha === null) {
         return response.status(400).send({"responseMsg": "Captcha undefined"});
@@ -87,11 +77,6 @@ captchaVerify = function(request, response, next) {
 
 // mail POST
 app.post('/mail', inputValidation, captchaVerify, (request,response) => {
-    response.header("Access-Control-Allow-Origin", "*");
-    response.header("Access-Control-Allow-Methods", "DELETE, GET, POST, PUT, OPTIONS");
-    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    response.header("Access-Control-Allow-Credentials", true);
-
     // db upload
     db.collection("mail").add({
         created: admin.firestore.FieldValue.serverTimestamp(),
