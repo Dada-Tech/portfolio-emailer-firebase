@@ -16,10 +16,11 @@ app.use(express.json());
 // cors middleware
 const originsWhitelist = ['https://daviddada.com','https://dadadavid.com','http://localhost:4200','http://127.0.0.1:4200'];
 const corsOptions = {
-    origin: function(origin, callback) {
-        const isWhitelisted = originsWhitelist.includes(origin);
-        callback(null, isWhitelisted);
-    },
+    // origin: function(origin, callback) {
+    //     const isWhitelisted = originsWhitelist.includes(origin);
+    //     callback(null, isWhitelisted);
+    // },
+    origin: "*",
     "optionsSuccessStatus": 200,
     "Access-Control-Allow-Methods":"GET, PUT, POST, DELETE, HEAD, OPTIONS",
     methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS",
