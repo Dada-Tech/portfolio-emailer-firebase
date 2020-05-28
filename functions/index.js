@@ -22,9 +22,13 @@ const corsOptions = {
     },
     "optionsSuccessStatus": 200,
     "Access-Control-Allow-Methods":"GET, PUT, POST, DELETE, HEAD, OPTIONS",
+    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS",
     "Access-Control-Allow-Headers":"Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    exposedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
     "Access-Control-Allow-Origin":"*",
-    "Access-Control-Allow-Credentials": true
+    "Access-Control-Allow-Credentials": true,
+    "preflightContinue": true,
 };
 app.use(cors(corsOptions));
 
