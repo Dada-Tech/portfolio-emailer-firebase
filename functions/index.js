@@ -16,26 +16,17 @@ app.use(express.json());
 // cors middleware
 const originsWhitelist = ['https://daviddada.com','https://dadadavid.com','http://localhost:4200','http://127.0.0.1:4200'];
 const corsOptions = {
-    // origin: function(origin, callback) {
-    //     const isWhitelisted = originsWhitelist.includes(origin);
-    //     callback(null, isWhitelisted);
-    // },
-    origin: "*",
+    origin: function(origin, callback) {
+        const isWhitelisted = originsWhitelist.includes(origin);
+        callback(null, isWhitelisted);
+    },
     "optionsSuccessStatus": 200,
     "Access-Control-Allow-Methods":"GET, PUT, POST, DELETE, HEAD, OPTIONS",
-    methods: "GET, PUT, POST, DELETE, HEAD, OPTIONS",
     "Access-Control-Allow-Headers":"Origin, X-Requested-With, Content-Type, Accept, Authorization",
-    allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
-    exposedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
     "Access-Control-Allow-Origin":"*",
-    "Access-Control-Allow-Credentials": true,
-    "preflightContinue": true,
+    "Access-Control-Allow-Credentials": true
 };
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+
 app.use(cors(corsOptions));
 
 // Joi input validation middleware
