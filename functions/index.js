@@ -55,7 +55,6 @@ captchaVerify = function(request, response, next) {
         return response.status(400).send({"responseMsg": "Captcha undefined"});
     }
 
-    // const verificationURL = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${request.body.recaptcha}&remoteip=${request.connection.remoteAddress}`;
     const verificationURL = `https://recaptcha.google.com/recaptcha/api/siteverify?secret=${functions.config().captcha.secretkey}&response=${request.body.recaptcha}&remoteip=${request.connection.remoteAddress}`;
 
     https.get(verificationURL, (resG) => {
@@ -63,7 +62,7 @@ captchaVerify = function(request, response, next) {
         resG.on('data', (chunk) => { rawData += chunk });
         resG.on('end', () => {
             try {
-                var parsedData = JSON.parse(rawData);
+                let parsedData = JSON.parse(rawData);
                 if (parsedData.success === true) {
                     return next();
                 } else {
@@ -74,6 +73,7 @@ captchaVerify = function(request, response, next) {
             }
         });
     });
+    return true;
 };
 
 // mail POST
