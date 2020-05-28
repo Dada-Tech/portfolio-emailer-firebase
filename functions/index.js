@@ -22,13 +22,19 @@ const corsOptions = {
     },
     "optionsSuccessStatus": 200,
     "Access-Control-Allow-Methods":"GET, PUT, POST, DELETE, HEAD, OPTIONS",
-    "Access-Control-Allow-Headers":"Origin, X-Requested-With, Content-Type, Accept",
-    "Access-Control-Allow-Origin":"*"
+    "Access-Control-Allow-Headers":"Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "Access-Control-Allow-Origin":"*",
+    "Access-Control-Allow-Credentials": true
 };
 app.use(cors(corsOptions));
 
 // Joi input validation middleware
 inputValidation = function(request, response, next) {
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Methods", "DELETE, GET, POST, PUT, OPTIONS");
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    response.header("Access-Control-Allow-Credentials", true);
+
     // input validation
     const schema = Joi.object().keys({
         name: Joi.string().min(3).required(),
