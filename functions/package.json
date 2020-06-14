@@ -3,11 +3,11 @@
   "description": "Cloud Functions for Firebase",
   "scripts": {
     "lint": "eslint .",
-    "serve": "firebase serve --only functions",
+    "serve": "firebase serve",
     "functions": "firebase serve --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
+    "deploy": "firebase deploy",
     "runtimeconfig": "firebase functions:config:get > .runtimeconfig.json",
     "logs": "firebase functions:log",
     "nodemon": "npm --prefix \"$RESOURCE_DIR\" run lint & nodemon --exec firebase serve",

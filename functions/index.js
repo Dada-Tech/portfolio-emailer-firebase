@@ -1,13 +1,17 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const express = require('express');
+const serviceAccount = require('./.serviceAccountKey.json');
 const app = express();
 const cors = require('cors');
 const https = require('https');
 const Joi = require('@hapi/joi');
 
 // firebase init
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://portfolio-emailer.firebaseio.com"
+});
 let db = admin.firestore();
 
 // express middleware
@@ -75,6 +79,10 @@ captchaVerify = function(request, response, next) {
     });
     return true;
 };
+
+app.get('/test', (request,response) => {
+    return response.status(200).send(functions.config().firebase);
+});
 
 // mail POST
 app.post('/mail', inputValidation, captchaVerify, (request,response) => {
